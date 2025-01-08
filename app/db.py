@@ -1,12 +1,14 @@
+import os
 from sqlalchemy import create_engine, Column, Integer, String, Float
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-DATABASE_URL = "postgresql://user:password@localhost/stock_tracker"
+# Load the database URL from environment variables
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 engine = create_engine(DATABASE_URL)
 Base = declarative_base()
-SessionLocal = sessionmaker(bind=engine)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 class Portfolio(Base):
     __tablename__ = "portfolio"
@@ -16,4 +18,5 @@ class Portfolio(Base):
     price = Column(Float)
 
 def setup_db():
+    """Create database tables."""
     Base.metadata.create_all(bind=engine)
