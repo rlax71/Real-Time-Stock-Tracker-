@@ -3,8 +3,11 @@ from sqlalchemy import create_engine, Column, Integer, String, Float
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-# Load the database URL from environment variables
+# Fetch the DATABASE_URL from environment variables
 DATABASE_URL = os.getenv("DATABASE_URL")
+
+if not DATABASE_URL:
+    raise ValueError("DATABASE_URL environment variable is not set.")
 
 engine = create_engine(DATABASE_URL)
 Base = declarative_base()
